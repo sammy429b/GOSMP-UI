@@ -1,14 +1,14 @@
 import { useState } from 'react'
-import FormPage from './formPage'
+import UserForm from './pages/UserForm'
 import { BrowserRouter, RouterProvider, createBrowserRouter } from 'react-router-dom'
-import Optimize from './optimize'
+import Optimize from './pages/Optimize'
 
   
 const router = createBrowserRouter(
   [
     {
     path: '/',
-    element: <FormPage/>
+    element: <UserForm/>
   },
   {
     path: '/optimize',
