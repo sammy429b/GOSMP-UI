@@ -9,7 +9,9 @@ export default function Optimize() {
     
     const [diversifyPortfolio, setDiversifyPortfolio] = useState(false)
 
-    const [sectors, setSectors] = useState([])
+    const [sectors, setSectors] = useState({})
+
+    const [selectedSectors, setSelectedSectors] = useState({})
 
     const [optimizedData, setOptimizedData] = useState({
         loading: false,
@@ -44,6 +46,13 @@ export default function Optimize() {
             loading: true
         })
 
+        const sectorValues = {}
+
+        for (const key in selectedSectors) { 
+            sectorValues[key] = selectedSectors[key] / 100
+        }
+        console.log(sectorValues);
+
         await fetch("http://localhost:8000/optimize", {
             method: "POST",
             headers: {
@@ -53,7 +62,8 @@ export default function Optimize() {
                 risk_category: "Low risk",
                 risk_score: 0.4,
                 invest_amount: investmentAmount,
-                duration: duration * 30
+                duration: duration * 30,
+                sectors: sectorValues
             })
         }).then(response => response.json())
             .then(data => {
@@ -72,6 +82,26 @@ export default function Optimize() {
     }
 
 
+    const getSectors = async () => { 
+        await fetch("http://localhost:8000/sectors/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "index": "nifty500"
+            })
+        
+        })
+            .then(response => response.json())
+            .then(data => {
+                setSectors(data.sectors)
+            })
+            .catch(error => { 
+                console.error(error)
+            })
+    }
+
 
 
     useEffect(() => { 
@@ -80,12 +110,14 @@ export default function Optimize() {
         question.addEventListener("mouseover", () => {            
             span.style.left = question.parentElement.offsetLeft + question.parentElement.offsetWidth + "px" 
             span.style.top = question.parentElement.offsetTop + "px"
-            console.log(span.style.left, span.style.top);
             span.hidden = false
         })
         question.addEventListener("mouseout", () => {
             span.hidden = true
         })
+
+        getSectors()
+
         return () => { 
             question.removeEventListener("mouseover", () => {
                 span.hidden = false
@@ -95,7 +127,6 @@ export default function Optimize() {
             })
         }
     }, [])
-    
     
     return (
         <>
@@ -129,7 +160,7 @@ export default function Optimize() {
                             </select>
                         <p className="italic text-sm self-start">
                             {
-                                duration === 0 ? "Select a duration to invest" : `duration end date is ${getDateWithDuration(duration)}`
+                                duration === 0 ? "Select a duration to invest" : `duration end date is ${(new Date(Date.now() + duration * 30 * 24 * 60 * 60 * 1000)).toDateString()}`
                             }
                         </p>
                         </label>
@@ -165,20 +196,38 @@ export default function Optimize() {
                                 </label>                                        
 
                                 <div className="flex flex-col gap-y-2">
-                                    
-                                    <div className="flex flex-row gap-x-2 items-center">
-                                        <label htmlFor="stocks" className="cursor-pointer label">
-                                            <div className="flex items-center">
-                                                <input type="checkbox" id="stocks" className="toggle toggle-primary" />
-                                            </div>
-                                        </label>
-                                        <span className="ml-2 flex justify-center items-center gap-x-2 hover:cursor-pointer">
-                                            Healthcare
-                                        </span>
-                                        <input type="text" placeholder="Type here" className="input input-bordered w-1/2" />
-                                        <span>%</span>
-                                    </div>
 
+                                    {
+                                        sectors.map((sector, index) => { 
+                                            return (
+                                                <div key={index} className="flex flex-row gap-x-2 items-center">
+                                                    <div className="flex w-full">
+                                                        <label htmlFor={sector} className="cursor-pointer label">
+                                                            <div className="flex items-center">
+                                                                <input type="checkbox" id={sector} className="toggle toggle-primary" value={selectedSectors[sector] ? true : false} onChange={(e) => {
+                                                                    if (e.target.checked) {
+                                                                        setSelectedSectors({ ...selectedSectors, [sector]: 0 })
+                                                                    } else {
+                                                                        const temp = selectedSectors
+                                                                        delete temp[sector]
+                                                                        setSelectedSectors(temp)
+                                                                    }
+                                                                }
+                                                            } />
+                                                            </div>
+                                                        </label>
+                                                        <span className="ml-2 flex justify-center items-center gap-x-2 hover:cursor-pointer">
+                                                            {sector}
+                                                        </span>
+                                                    </div>
+
+                                                    <input type="number" placeholder="Type here" className="input input-bordered w-1/2" value={selectedSectors[sector]? selectedSectors[sector]:"" } onChange={(e) => { setSelectedSectors({...selectedSectors, [sector]: Number(e.target.value)}) }} />
+                                                    <span>%</span>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                    
                                     </div>
                             </div>
                             
@@ -187,7 +236,7 @@ export default function Optimize() {
 
                     <div className="my-1 mb-8 w-1/2 flex justify-center">
                         <div className="padding-class form-control w-full max-w-lg">
-                        <button className="btn btn-neutral w-32" onClick={optimize}>
+                        <button className="btn btn-neutral w-32" onClick={optimize} disabled={optimizedData.loading}>
                             Optimize
                         </button>
                         </div>
@@ -204,7 +253,7 @@ export default function Optimize() {
                     }
 
                     {
-                        !optimizedData.data && (
+                        optimizedData.data && (
                             <>
                                 {/* Fill optimizedData.data */}
                                 <div className="my-2 w-2/3">
