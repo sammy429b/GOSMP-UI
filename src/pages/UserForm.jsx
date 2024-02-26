@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { questions, calculate_risk_score, calculate_risk_category } from '../data/questions'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 
 export default function UserForm() {
+
+    const navigate = useNavigate()
 
     const [answers, setAnswers] = useState({
         1: 1,
@@ -35,7 +37,11 @@ export default function UserForm() {
         const risk_score = calculate_risk_score(answers)
         const risk_category = calculate_risk_category(risk_score)
         setRiskScore({ risk_score: risk_score, risk_category: risk_category })
+    }
 
+    const optimizePage = () => {
+        localStorage.setItem('risk_score', JSON.stringify(risk_score))
+        navigate('/optimize')
     }
 
 
@@ -83,7 +89,7 @@ export default function UserForm() {
                 </div>
 
 
-                <Link to="/optimize" className="my-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-3 ">Optimize</Link>
+                <button to="/optimize" className="my-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-3 " onClick={optimizePage}>Optimize</button>
             </div>
         </>
     )

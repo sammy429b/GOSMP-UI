@@ -1,6 +1,8 @@
 import { useEffect } from "react"
 import { useRef } from "react"
 import { useState } from "react"
+import Diversify from "../components/diversify"
+import PortfolioTable from "../components/portfolioTable"
 
 export default function Optimize() {
 
@@ -18,12 +20,8 @@ export default function Optimize() {
         data: null
     })
 
-    const getDateWithDuration = (duration) => { 
-        const startDate = Date.now()
-        const endDate = new Date(startDate) + duration * 30 * 24 * 60 * 60 * 1000
-        const newEndDate = new Date(endDate)
-        return newEndDate.toDateString()
-    }
+    const [riskCategory, setRiskCategory] = useState("Low risk")
+
 
     const dialogRef = useRef()
 
@@ -51,7 +49,6 @@ export default function Optimize() {
         for (const key in selectedSectors) { 
             sectorValues[key] = selectedSectors[key] / 100
         }
-        console.log(sectorValues);
 
         await fetch("http://localhost:8000/optimize", {
             method: "POST",
@@ -59,8 +56,7 @@ export default function Optimize() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                risk_category: "Low risk",
-                risk_score: 0.4,
+                risk_category: riskCategory,
                 invest_amount: investmentAmount,
                 duration: duration * 30,
                 sectors: sectorValues
@@ -115,7 +111,13 @@ export default function Optimize() {
         question.addEventListener("mouseout", () => {
             span.hidden = true
         })
+            const risk = JSON.parse(localStorage.getItem('risk_score'))
+        
+        if (risk) { 
+            setRiskCategory(risk.risk_category)
+        } 
 
+        
         getSectors()
 
         return () => { 
@@ -167,6 +169,22 @@ export default function Optimize() {
 
                     </div>
 
+                    <div className="my-1 w-1/2 self-center flex flex-col items-center">
+                        <label className="form-control w-full max-w-lg">
+                            <div className="label">
+                                <span className="label-text text-base">Your risk category</span>
+                            </div>
+                            <select className="select select-bordered w-full max-w-lg" value={riskCategory} onChange={(e) => setRiskCategory(e.target.value)}>
+                                <option value="Low risk">Low risk</option>
+                                <option value="Moderate risk">Moderate risk</option>
+                                <option value="High risk">High risk</option>
+                                <option value="Very high risk">Very high risk</option>
+
+                            </select>
+                        </label>
+
+                    </div>
+
                     <div className="my-1 w-1/2 flex justify-center">
                         <div className="form-control w-full max-w-lg">
                             <div className="mt-2 flex flex-row justify-start">
@@ -188,49 +206,7 @@ export default function Optimize() {
 
                     {
                         diversifyPortfolio && (
-                            <div className="my-1">
-                                <label className="form-control w-full max-w-lg">
-                                    <div className="label">
-                                        <span className="label-text text-base">Select from the following assets with invest percentage</span>
-                                    </div>
-                                </label>                                        
-
-                                <div className="flex flex-col gap-y-2">
-
-                                    {
-                                        sectors.map((sector, index) => { 
-                                            return (
-                                                <div key={index} className="flex flex-row gap-x-2 items-center">
-                                                    <div className="flex w-full">
-                                                        <label htmlFor={sector} className="cursor-pointer label">
-                                                            <div className="flex items-center">
-                                                                <input type="checkbox" id={sector} className="toggle toggle-primary" value={selectedSectors[sector] ? true : false} onChange={(e) => {
-                                                                    if (e.target.checked) {
-                                                                        setSelectedSectors({ ...selectedSectors, [sector]: 0 })
-                                                                    } else {
-                                                                        const temp = selectedSectors
-                                                                        delete temp[sector]
-                                                                        setSelectedSectors(temp)
-                                                                    }
-                                                                }
-                                                            } />
-                                                            </div>
-                                                        </label>
-                                                        <span className="ml-2 flex justify-center items-center gap-x-2 hover:cursor-pointer">
-                                                            {sector}
-                                                        </span>
-                                                    </div>
-
-                                                    <input type="number" placeholder="Type here" className="input input-bordered w-1/2" value={selectedSectors[sector]? selectedSectors[sector]:"" } onChange={(e) => { setSelectedSectors({...selectedSectors, [sector]: Number(e.target.value)}) }} />
-                                                    <span>%</span>
-                                                </div>
-                                            )
-                                        })
-                                    }
-                                    
-                                    </div>
-                            </div>
-                            
+                            <Diversify sectors={sectors} selectedSectors={selectedSectors} setSelectedSectors={setSelectedSectors} />
                         )
                     }
 
@@ -254,84 +230,8 @@ export default function Optimize() {
 
                     {
                         optimizedData.data && (
-                            <>
-                                {/* Fill optimizedData.data */}
-                                <div className="my-2 w-2/3">
-                                    <p className="text-4xl font-semibold">Optimized Results</p>
-
-                                    <span className="divider"></span>
-
-                                    <div className="flex flex-col gap-y-2">
-                                        <p className="text-2xl">Equal weights results</p>
-                                        <div className="flex flex-row gap-x-2">
-                                            <span>Portfolio variance</span>
-                                            <span>{(optimizedData.data.equal_weights_results.portfolio_variance * 100).toFixed(2)}%</span>
-                                        </div>
-                                        <div className="flex flex-row gap-x-2">
-                                            <span>Portfolio volatility</span>
-                                            <span>{(optimizedData.data.equal_weights_results.portfolio_volatility * 100).toFixed(2)}%</span>
-                                        </div>
-                                        <div className="flex flex-row gap-x-2">
-                                            <span>Portfolio annual return</span>
-                                            <span>{(optimizedData.data.equal_weights_results.portfolio_annual_return * 100).toFixed(2)}%</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="my-2 w-2/3">
-                                    <h2 className="text-2xl font-semibold">Optimized Results</h2>
-                                    <div className="flex flex-col gap-y-2">
-                                        {
-                                            <div className="flex flex-col gap-y-2">
-                                                <div className="flex flex-row gap-x-2">
-                                                    <span>Expected returns</span>
-                                                    <span>{(optimizedData.data.optimized_results.performance.expected_returns * 100).toFixed(2)}%</span>
-                                                </div>
-                                                <div className="flex flex-row gap-x-2">
-                                                    <span>Volatility</span>
-                                                    <span>{(optimizedData.data.optimized_results.performance.volatility * 100).toFixed(2)}%</span>
-                                                </div>
-                                                <div className="flex flex-row gap-x-2">
-                                                    <span>Sharpe ratio</span>
-                                                    <span>{optimizedData.data.optimized_results.performance.sharpe_ratio}</span>
-                                                </div>
-                                            </div>
-                                        }                                           
-                                    </div>
-                                </div>
-
-                                {/* Insert an editable table with invested and weights */}
-                                <div className="my-2 w-2/3">
-                                    <h2 className="text-xl font-semibold">Invested</h2>
-                                    <table className="table w-full">
-                                        <thead>
-                                            <tr>
-                                                <th>Stock</th>
-                                                <th>Price</th>
-                                                <th>Units</th>
-                                                <th>Allocated</th>
-                                                <th>Percentage</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                Object.keys(optimizedData.data.optimized_results.invested).map((key, index) => {
-                                                    return (
-                                                        <tr key={index}>
-                                                            <td>{key}</td>
-                                                            <td>{optimizedData.data.optimized_results.invested[key].price.toFixed(2)}</td>
-                                                            <td>{optimizedData.data.optimized_results.invested[key].units}</td>
-                                                            <td>{optimizedData.data.optimized_results.invested[key].allocated.toFixed(2)}</td>
-                                                            <td>{(optimizedData.data.optimized_results.weights[key]).toFixed(2)}%</td>
-                                                        </tr>
-                                                    )
-                                                })
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </>
-                        )
+                                <PortfolioTable optimizedData={optimizedData} />
+                            )
                     }
 
                 </div>
