@@ -3,6 +3,7 @@ import { useRef } from "react"
 import { useState } from "react"
 import Diversify from "../components/diversify"
 import PortfolioTable from "../components/portfolioTable"
+import BackTest from "../components/backtest"
 
 export default function Optimize() {
 
@@ -22,9 +23,12 @@ export default function Optimize() {
 
     const [riskCategory, setRiskCategory] = useState("Low risk")
 
+    const [backtestData, setBacktestData] = useState({
+        loading: false,
+        data: null
+    })
 
     const dialogRef = useRef()
-
 
 
     const optimize = async () => { 
@@ -76,6 +80,41 @@ export default function Optimize() {
                 })
             })
     }
+
+    const backtest = async () => { 
+        setBacktestData({
+            ...backtestData,
+            loading: true
+        })
+        await fetch("http://localhost:8000/backtest", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                risk_category: riskCategory,
+                invest_amount: investmentAmount,
+                duration: duration * 30,
+                invested: optimizedData.data.optimized_results.invested,
+                weights: optimizedData.data.optimized_results.weights,
+                start_date: optimizedData.data.start_date
+            })
+        }).then(response => response.json())
+            .then(data => {
+                setBacktestData({
+                    loading: false,
+                    data: data
+                })
+            })
+            .catch(error => {
+                console.error(error)
+                setBacktestData({
+                    loading: false,
+                    data: null
+                })
+            })
+    }
+
 
 
     const getSectors = async () => { 
@@ -227,11 +266,27 @@ export default function Optimize() {
                             </div>
                         )
                     }
-
+                
                     {
                         optimizedData.data && (
+                            <>
+                                <div className="my-2 w-2/3">
+                                    <p className="text-2xl font-semibold">Date</p>
+                                    <p>{optimizedData.data.start_date}</p>
+                                </div>
                                 <PortfolioTable optimizedData={optimizedData} />
+                                <button className="btn btn-neutral w-32" onClick={backtest} disabled={backtestData.loading}> Backtest</button>
+                            </>
                             )
+                    }
+
+
+                    {
+                        backtestData.data && (
+                            <>
+                                <BackTest backtestData={backtestData.data} />
+                            </>
+                        )
                     }
 
                 </div>
