@@ -4,6 +4,7 @@ import { useState } from "react"
 import Diversify from "../components/diversify"
 import PortfolioTable from "../components/portfolioTable"
 import BackTest from "../components/backtest"
+import GenerateReport from "../util/report"
 
 export default function Optimize() {
 
@@ -275,7 +276,9 @@ export default function Optimize() {
                                     <p>{optimizedData.data.start_date}</p>
                                 </div>
                                 <PortfolioTable optimizedData={optimizedData} />
-                                <button className="btn btn-neutral w-32" onClick={backtest} disabled={backtestData.loading}> Backtest</button>
+                                <div className="my-2 w-2/3">
+                                    <button className="btn btn-neutral w-32" onClick={backtest} disabled={backtestData.loading}> Backtest</button>
+                                </div>
                             </>
                             )
                     }
@@ -285,9 +288,20 @@ export default function Optimize() {
                         backtestData.data && (
                             <>
                                 <BackTest backtestData={backtestData.data} />
+
+                                <div className="w-full">
+                                    <button className="btn btn-neutral w-32"
+                                        onClick={() => {
+                                            GenerateReport(optimizedData.data, backtestData.data)
+                                        }}
+                                    >Download portfolio     
+                                    </button>
+                                </div>
                             </>
                         )
                     }
+
+
 
                 </div>
             </div>

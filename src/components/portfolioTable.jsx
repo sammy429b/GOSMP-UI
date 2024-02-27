@@ -83,8 +83,7 @@ export default function PortfolioTable({ optimizedData }) {
                         }
                     </tbody>
                 </table>
-                <div className='flex justify-center w-1/2'>
-                    <Bar className="w-1/2"
+                    <Bar className="w-full"
                         data={{
                             labels: Object.keys(optimizedData.data.optimized_results.invested),
                             datasets: [
@@ -117,7 +116,6 @@ export default function PortfolioTable({ optimizedData }) {
                             },
                         }}
                     />
-                </div>
             </div>
         </>
 
