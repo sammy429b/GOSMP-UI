@@ -1,5 +1,5 @@
 import Chart from 'chart.js/auto';
-import { Line, Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 
 export default function BackTest({backtestData}) {
     
@@ -29,15 +29,14 @@ export default function BackTest({backtestData}) {
         },
     };
 
-    console.log(backtestData);
     return (
         <>
             {
                 // Draw chart of equal weights results and nifty pct change
 
                 <div className="my-2 w-2/3">
-                    <h2 className="text-2xl font-semibold">Equal weights results</h2>
-                    <Line
+                    <h2 className="text-2xl font-semibold">Results</h2>
+                    <Line 
                         data={{
                             labels: Object.values(backtestData.equal_weights_results.Date),
                             datasets: [
@@ -56,7 +55,7 @@ export default function BackTest({backtestData}) {
                                     borderColor: 'rgba(54, 162, 235, 0.2)',
                                 },
                                 {
-                                    label: "equal weights results",
+                                    label: "equal weights",
                                     data: Object.values(backtestData.equal_weights_results.PctChange),
                                     fill: false,
                                     backgroundColor: 'rgb(255, 159, 64)',

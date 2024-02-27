@@ -1,4 +1,9 @@
-export default function PortfolioTable({optimizedData}) { 
+import Chart from 'chart.js/auto';
+import { Bar } from 'react-chartjs-2';
+
+
+export default function PortfolioTable({ optimizedData }) {
+
 
 
     return (
@@ -58,6 +63,7 @@ export default function PortfolioTable({optimizedData}) {
                             <th>Units</th>
                             <th>Allocated</th>
                             <th>Percentage</th>
+                            <th>sector</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -70,12 +76,48 @@ export default function PortfolioTable({optimizedData}) {
                                         <td>{optimizedData.data.optimized_results.invested[key].units}</td>
                                         <td>{optimizedData.data.optimized_results.invested[key].allocated.toFixed(2)}</td>
                                         <td>{(optimizedData.data.optimized_results.weights[key]).toFixed(2)}%</td>
+                                        <td>{optimizedData.data.optimized_results.sector_allocation[key]}</td>
                                     </tr>
                                 )
                             })
                         }
                     </tbody>
                 </table>
+                <div className='flex justify-center w-1/2'>
+                    <Bar className="w-1/2"
+                        data={{
+                            labels: Object.keys(optimizedData.data.optimized_results.invested),
+                            datasets: [
+                                {
+                                    data: Object.values(optimizedData.data.optimized_results.weights),
+                                    backgroundColor: 'lightblue',
+                                    borderColor: 'black',
+                                    borderWidth: 1,
+                                },
+                            ],
+                        }}
+                        height={400}
+                        width={600}
+                        options={{
+                            elements: {
+                                bar: {
+                                    borderWidth: 2,
+                                },
+                            },
+                            responsive: true,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Invested',
+                                },
+                                legend: {
+                                    display: false
+                                }
+
+                            },
+                        }}
+                    />
+                </div>
             </div>
         </>
 

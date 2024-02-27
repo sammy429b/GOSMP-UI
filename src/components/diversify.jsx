@@ -37,7 +37,7 @@ export default function Diversify({sectors, selectedSectors, setSelectedSectors}
                                     </span>
                                 </div>
 
-                                <input type="number" id={`${sector}_num`} placeholder="Type here" max={"100"} min={0} className="input input-bordered w-1/2" value={selectedSectors[sector] ? selectedSectors[sector] : ""} onChange={(e) => { setSelectedSectors({ ...selectedSectors, [sector]: Number(e.target.value) }); document.getElementById(sector).checked = true; }} onWheel={(e) => e.target.blur()} />
+                                <input type="number" id={`${sector}_num`} placeholder="Type here" max={100} min={0} className="input input-bordered w-1/2" value={selectedSectors[sector] ? selectedSectors[sector] : ""} onChange={(e) => { setSelectedSectors({ ...selectedSectors, [sector]: Number(e.target.value) }); document.getElementById(sector).checked = true; }} onWheel={(e) => e.target.blur()} />
                                 <span>%</span>
                             </div>
                         )
