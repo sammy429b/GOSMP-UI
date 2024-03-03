@@ -196,9 +196,9 @@ export default function Optimize() {
                                 <option value={1}>1 month</option>
                                 <option value={2}>2 months</option>
                                 <option value={6}>6 months</option>
-                                <option value={6}>12 months</option>
-                                <option value={7}>18 months</option>
-                                <option value={8}>24 months</option>
+                                <option value={12}>12 months</option>
+                                <option value={18}>18 months</option>
+                                <option value={24}>24 months</option>
                             </select>
                         <p className="italic text-sm self-start">
                             {
@@ -252,7 +252,7 @@ export default function Optimize() {
 
                     <div className="my-1 mb-8 w-1/2 flex justify-center">
                         <div className="padding-class form-control w-full max-w-lg">
-                        <button className="btn btn-neutral w-32" onClick={optimize} disabled={optimizedData.loading}>
+                        <button className="btn btn-primary w-32" onClick={optimize} disabled={optimizedData.loading}>
                             Optimize
                         </button>
                         </div>

@@ -58,7 +58,7 @@ export default function BackTest({backtestData}) {
                                     label: "equal weights",
                                     data: Object.values(backtestData.equal_weights_results.PctChange),
                                     fill: false,
-                                    backgroundColor: 'rgb(255, 159, 64)',
+                                    backgroundColor: 'green',
                                     borderColor: 'rgba(255, 99, 132, 0.2)',
                                 }
                             ]
