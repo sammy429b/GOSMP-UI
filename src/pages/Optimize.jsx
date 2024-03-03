@@ -10,7 +10,7 @@ export default function Optimize() {
 
     const [investmentAmount, setInvestmentAmount] = useState(100000)
     const [duration, setDuration] = useState(1)
-    
+
     const [diversifyPortfolio, setDiversifyPortfolio] = useState(false)
 
     const [sectors, setSectors] = useState({})
@@ -32,16 +32,16 @@ export default function Optimize() {
     const dialogRef = useRef()
 
 
-    const optimize = async () => { 
-        if (investmentAmount === 0) { 
+    const optimize = async () => {
+        if (investmentAmount === 0) {
             alert("Please enter the amount you want to invest")
             return
         }
-        if (duration === 0) { 
+        if (duration === 0) {
             alert("Please select a duration to invest")
             return
         }
-        if (diversifyPortfolio) { 
+        if (diversifyPortfolio) {
             // set sectors
         }
         setOptimizedData({
@@ -51,7 +51,7 @@ export default function Optimize() {
 
         const sectorValues = {}
 
-        for (const key in selectedSectors) { 
+        for (const key in selectedSectors) {
             sectorValues[key] = selectedSectors[key] / 100
         }
 
@@ -73,7 +73,7 @@ export default function Optimize() {
                     data: data
                 })
             })
-            .catch(error => { 
+            .catch(error => {
                 console.error(error)
                 setOptimizedData({
                     loading: false,
@@ -82,7 +82,7 @@ export default function Optimize() {
             })
     }
 
-    const backtest = async () => { 
+    const backtest = async () => {
         setBacktestData({
             ...backtestData,
             loading: true
@@ -118,7 +118,7 @@ export default function Optimize() {
 
 
 
-    const getSectors = async () => { 
+    const getSectors = async () => {
         await fetch("http://localhost:8000/sectors/", {
             method: "POST",
             headers: {
@@ -127,40 +127,40 @@ export default function Optimize() {
             body: JSON.stringify({
                 "index": "nifty500"
             })
-        
+
         })
             .then(response => response.json())
             .then(data => {
                 setSectors(data.sectors)
             })
-            .catch(error => { 
+            .catch(error => {
                 console.error(error)
             })
     }
 
 
 
-    useEffect(() => { 
+    useEffect(() => {
         const question = document.querySelector("#question")
         const span = dialogRef.current
-        question.addEventListener("mouseover", () => {            
-            span.style.left = question.parentElement.offsetLeft + question.parentElement.offsetWidth + "px" 
+        question.addEventListener("mouseover", () => {
+            span.style.left = question.parentElement.offsetLeft + question.parentElement.offsetWidth + "px"
             span.style.top = question.parentElement.offsetTop + "px"
             span.hidden = false
         })
         question.addEventListener("mouseout", () => {
             span.hidden = true
         })
-            const risk = JSON.parse(localStorage.getItem('risk_score'))
-        
-        if (risk) { 
-            setRiskCategory(risk.risk_category)
-        } 
+        const risk = JSON.parse(localStorage.getItem('risk_score'))
 
-        
+        if (risk) {
+            setRiskCategory(risk.risk_category)
+        }
+
+
         getSectors()
 
-        return () => { 
+        return () => {
             question.removeEventListener("mouseover", () => {
                 span.hidden = false
             })
@@ -169,7 +169,7 @@ export default function Optimize() {
             })
         }
     }, [])
-    
+
     return (
         <>
             <div className="w-full h-full flex flex-col justify-center items-center">
@@ -177,7 +177,7 @@ export default function Optimize() {
                 <h1 className="text-4xl font-semibold mt-24">Portfolio Optimization</h1>
 
                 <div className="w-full flex flex-col items-center">
-                  
+
                     <div className="my-1 w-1/2 flex justify-center">
                         <label className="form-control w-full max-w-lg">
                             <div className="label">
@@ -200,11 +200,11 @@ export default function Optimize() {
                                 <option value={18}>18 months</option>
                                 <option value={24}>24 months</option>
                             </select>
-                        <p className="italic text-sm self-start">
-                            {
-                                duration === 0 ? "Select a duration to invest" : `duration end date is ${(new Date(Date.now() + duration * 30 * 24 * 60 * 60 * 1000)).toDateString()}`
-                            }
-                        </p>
+                            <p className="italic text-sm self-start">
+                                {
+                                    duration === 0 ? "Select a duration to invest" : `duration end date is ${(new Date(Date.now() + duration * 30 * 24 * 60 * 60 * 1000)).toDateString()}`
+                                }
+                            </p>
                         </label>
 
                     </div>
@@ -240,7 +240,7 @@ export default function Optimize() {
                                 <div className="absolute z-10 w-48 p-2 bg-white rounded-md shadow-md" hidden id="dialogHelper" ref={dialogRef}>
                                     <p className="text-sm">Diversifying your portfolio means spreading your investments across a variety of asset sectors.</p>
                                 </div>
-                            </div>    
+                            </div>
                         </div>
                     </div>
 
@@ -252,9 +252,9 @@ export default function Optimize() {
 
                     <div className="my-1 mb-8 w-1/2 flex justify-center">
                         <div className="padding-class form-control w-full max-w-lg">
-                        <button className="btn btn-primary w-32" onClick={optimize} disabled={optimizedData.loading}>
-                            Optimize
-                        </button>
+                            <button className="btn btn-primary w-32" onClick={optimize} disabled={optimizedData.loading}>
+                                Optimize
+                            </button>
                         </div>
                     </div>
 
@@ -262,12 +262,12 @@ export default function Optimize() {
                         optimizedData.loading && (
                             <div className="my-2 w-full flex justify-center items-center">
                                 <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12">
-                                    
+
                                 </div>
                             </div>
                         )
                     }
-                
+
                     {
                         optimizedData.data && (
                             <>
@@ -280,7 +280,7 @@ export default function Optimize() {
                                     <button className="btn btn-neutral w-32" onClick={backtest} disabled={backtestData.loading}> Backtest</button>
                                 </div>
                             </>
-                            )
+                        )
                     }
 
 
@@ -289,12 +289,12 @@ export default function Optimize() {
                             <>
                                 <BackTest backtestData={backtestData.data} />
 
-                                <div className="w-full">
+                                <div className="w-full my-2">
                                     <button className="btn btn-neutral w-32"
                                         onClick={() => {
                                             GenerateReport(optimizedData.data, backtestData.data)
                                         }}
-                                    >Download portfolio     
+                                    >Download portfolio
                                     </button>
                                 </div>
                             </>

@@ -47,17 +47,17 @@ export default function UserForm() {
 
     return (
         <>
-            <div className=' px-2 my-4'>
+            <div className='px-2 my-4'>
                 <div className='px-4'>
 
-                <h1 className="text-3xl font-bold mb-4">Investment Risk Assessment</h1>
-                <p className="text-lg mb-4">Please answer the following questions to assess your risk tolerance.</p>
+                    <h1 className="text-3xl font-bold mb-4">Investment Risk Assessment</h1>
+                    <p className="text-lg mb-4">Please answer the following questions to assess your risk tolerance.</p>
                 </div>
                 <div className='p-4'>
                     {
                         Object.keys(questions).map((index) => {
                             return (
-                                <div key={index} className="mb-4 bg-[#f0f2f6] p-4">
+                                <div key={index} className="mb-4 bg-base-300 p-4 rounded">
                                     <h2 className="text-lg font-bold mb-2">{questions[index]["question"]}</h2>
                                     <div className=''>
                                         {
@@ -89,7 +89,7 @@ export default function UserForm() {
                 </div>
 
 
-                <button to="/optimize" className="my-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-3 " onClick={optimizePage}>Optimize</button>
+                <button to="/optimize" className="my-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-3 " onClick={optimizePage}>Next ></button>
             </div>
         </>
     )
