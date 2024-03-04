@@ -30,8 +30,15 @@ export default function Optimize() {
     })
 
     const dialogRef = useRef()
-
-
+    const [portfolio_variation_data, setPOrtfolios] = useState({
+        loading: false,
+        data: {
+            "monte": {},
+            "backlitter": {},
+            "efficient": {}
+        }
+    })
+    
     const optimize = async () => {
         if (investmentAmount === 0) {
             alert("Please enter the amount you want to invest")
@@ -72,6 +79,15 @@ export default function Optimize() {
                     loading: false,
                     data: data
                 })
+                setPOrtfolios({
+                    loading: false,
+                    data: {
+                        "monte": data,
+                        "backlitter": data,
+                        "efficient": data
+                    }
+                })
+
             })
             .catch(error => {
                 console.error(error)
@@ -138,7 +154,11 @@ export default function Optimize() {
             })
     }
 
-
+    const selectPortfolio = (port_type) => {
+        if (port_type === 1) setOptimizedData(portfolio_variation_data.data["monte"])
+        else if (port_type === 2) setOptimizedData(portfolio_variation_data.data["backlitter"])
+        else setOptimizedData(portfolio_variation_data.data["efficient"])
+    }
 
     useEffect(() => {
         const question = document.querySelector("#question")
@@ -156,7 +176,6 @@ export default function Optimize() {
         if (risk) {
             setRiskCategory(risk.risk_category)
         }
-
 
         getSectors()
 
@@ -267,6 +286,12 @@ export default function Optimize() {
                             </div>
                         )
                     }
+
+                    <div className="mx-auto w-[40%] flex flex-row justify-between items-center">
+                        <button className="bg-blue-500 w-32 rounded-md h-12 font-bold text-white hover:bg-blue-600" onClick={selectPortfolio(1)}>Portfolio 1</button>
+                        <button className="bg-blue-500 w-32 rounded-md h-12 font-bold text-white hover:bg-blue-600" onClick={selectPortfolio(2)}>Portfolio 2</button>
+                        <button className="bg-blue-500 w-32 rounded-md h-12 font-bold text-white hover:bg-blue-600" onClick={selectPortfolio(3)}>Portfolio 3</button>
+                    </div>
 
                     {
                         optimizedData.data && (
