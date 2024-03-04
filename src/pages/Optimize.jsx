@@ -5,7 +5,7 @@ import Diversify from "../components/diversify"
 import PortfolioTable from "../components/portfolioTable"
 import BackTest from "../components/backtest"
 import GenerateReport from "../util/report"
-
+import clsx from "clsx"
 export default function Optimize() {
 
     const [investmentAmount, setInvestmentAmount] = useState(100000)
@@ -19,7 +19,8 @@ export default function Optimize() {
 
     const [optimizedData, setOptimizedData] = useState({
         loading: false,
-        data: null
+        data: null,
+        type: 0
     })
 
     const [riskCategory, setRiskCategory] = useState("Low risk")
@@ -30,15 +31,12 @@ export default function Optimize() {
     })
 
     const dialogRef = useRef()
-    const [portfolio_variation_data, setPOrtfolios] = useState({
+    const [portfolio_variation_data, setPortfolios] = useState({
         loading: false,
-        data: {
-            "monte": {},
-            "backlitter": {},
-            "efficient": {}
-        }
+        data: null
     })
-    
+    const [portfolio_type, setPortfolioType] = useState(1);
+
     const optimize = async () => {
         if (investmentAmount === 0) {
             alert("Please enter the amount you want to invest")
@@ -51,8 +49,13 @@ export default function Optimize() {
         if (diversifyPortfolio) {
             // set sectors
         }
-        setOptimizedData({
-            ...optimizedData,
+        // setOptimizedData({
+        //     ...optimizedData,
+        //     loading: true
+        // })
+
+        setPortfolios({
+            ...portfolio_variation_data,
             loading: true
         })
 
@@ -75,11 +78,7 @@ export default function Optimize() {
             })
         }).then(response => response.json())
             .then(data => {
-                setOptimizedData({
-                    loading: false,
-                    data: data
-                })
-                setPOrtfolios({
+                setPortfolios({
                     loading: false,
                     data: {
                         "monte": data,
@@ -91,9 +90,18 @@ export default function Optimize() {
             })
             .catch(error => {
                 console.error(error)
-                setOptimizedData({
+                // setOptimizedData({
+                //     loading: false,
+                //     data: null
+                // })
+
+                setPortfolios({
                     loading: false,
-                    data: null
+                    data: {
+                        "monte": null,
+                        "backlitter": null,
+                        "efficient": null
+                    }
                 })
             })
     }
@@ -152,12 +160,6 @@ export default function Optimize() {
             .catch(error => {
                 console.error(error)
             })
-    }
-
-    const selectPortfolio = (port_type) => {
-        if (port_type === 1) setOptimizedData(portfolio_variation_data.data["monte"])
-        else if (port_type === 2) setOptimizedData(portfolio_variation_data.data["backlitter"])
-        else setOptimizedData(portfolio_variation_data.data["efficient"])
     }
 
     useEffect(() => {
@@ -271,14 +273,14 @@ export default function Optimize() {
 
                     <div className="my-1 mb-8 w-1/2 flex justify-center">
                         <div className="padding-class form-control w-full max-w-lg">
-                            <button className="btn btn-primary w-32" onClick={optimize} disabled={optimizedData.loading}>
+                            <button className="btn btn-primary w-32" onClick={optimize} disabled={portfolio_variation_data.loading}>
                                 Optimize
                             </button>
                         </div>
                     </div>
 
                     {
-                        optimizedData.loading && (
+                        portfolio_variation_data.loading && (
                             <div className="my-2 w-full flex justify-center items-center">
                                 <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12">
 
@@ -286,12 +288,19 @@ export default function Optimize() {
                             </div>
                         )
                     }
+                    {
+                        portfolio_variation_data.data && (
+                            <div className="mx-auto w-[40%]">
+                                <p className="text-xl font-semibold mb-4">Choose your portfolio type please!!! - </p>
+                                <div className=" flex flex-row justify-between items-center bg-gray-100 rounded-3xl">
+                                    <button className={clsx("w-32 rounded-3xl h-12 font-bold text-black hover:bg-blue-600", (optimizedData.type === 1 && "bg-blue-500"))} onClick={() => { setOptimizedData({ loading: false, data: portfolio_variation_data.data["monte"], type: 1 }) }}>Monte</button>
+                                    <button className={clsx("w-32 rounded-3xl h-12 font-bold text-black hover:bg-blue-600", (optimizedData.type === 2 && "bg-blue-500"))} onClick={() => { setOptimizedData({ loading: false, data: portfolio_variation_data.data["efficient"], type: 2 }) }}>Efficient</button>
+                                    <button className={clsx("w-32 rounded-3xl h-12 font-bold text-black hover:bg-blue-600", (optimizedData.type === 3 && "bg-blue-500"))} onClick={() => { setOptimizedData({ loading: false, data: portfolio_variation_data.data["backlitter"], type: 3 }) }}>Backlitter</button>
 
-                    <div className="mx-auto w-[40%] flex flex-row justify-between items-center">
-                        <button className="bg-blue-500 w-32 rounded-md h-12 font-bold text-white hover:bg-blue-600" onClick={selectPortfolio(1)}>Portfolio 1</button>
-                        <button className="bg-blue-500 w-32 rounded-md h-12 font-bold text-white hover:bg-blue-600" onClick={selectPortfolio(2)}>Portfolio 2</button>
-                        <button className="bg-blue-500 w-32 rounded-md h-12 font-bold text-white hover:bg-blue-600" onClick={selectPortfolio(3)}>Portfolio 3</button>
-                    </div>
+                                </div>
+                            </div>
+                        )
+                    }
 
                     {
                         optimizedData.data && (
@@ -299,6 +308,7 @@ export default function Optimize() {
                                 <div className="my-2 w-2/3">
                                     <p className="text-2xl font-semibold">Date</p>
                                     <p>{optimizedData.data.start_date}</p>
+                                    <p className="text-2xl font-semibold">TYPE OF PORTFOLIO  - {optimizedData.type}</p>
                                 </div>
                                 <PortfolioTable optimizedData={optimizedData} />
                                 <div className="my-2 w-2/3">
@@ -329,7 +339,7 @@ export default function Optimize() {
 
 
                 </div>
-            </div>
+            </div >
         </>
     )
 }
