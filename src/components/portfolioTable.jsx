@@ -4,7 +4,7 @@ import Card from './Card';
 
 
 export default function PortfolioTable({ optimizedData }) {
-
+    console.log(optimizedData)
     return (
         <>
             {/* Fill optimizedData.data */}
@@ -23,6 +23,12 @@ export default function PortfolioTable({ optimizedData }) {
                                 <div className="stat-title">Volatility</div>
                                 <div className="stat-value">{(optimizedData.data.equal_weights_results.portfolio_volatility * 100).toFixed(2)}%</div>
                             </div>
+
+                            <div className="stat">
+                                <div className="stat-title">Sharpe ratio</div>
+                                <div className="stat-value">{optimizedData.data.equal_weights_results.sharpe_ratio}%</div>
+                            </div>
+
 
                             <div className="stat">
                                 <div className="stat-title">Annual return</div>
@@ -46,6 +52,10 @@ export default function PortfolioTable({ optimizedData }) {
                                 <div className="stat-value">{(optimizedData.data.optimized_results.performance.volatility * 100).toFixed(2)}%</div>
                             </div>
 
+                            <div className="stat">
+                                <div className="stat-title">Sharpe ratio</div>
+                                <div className="stat-value">{optimizedData.data.optimized_results.performance.sharpe_ratio.toFixed(2)}</div>
+                            </div>
 
                             <div className="stat">
                                 <div className="stat-title">Annual returns</div>
@@ -54,10 +64,6 @@ export default function PortfolioTable({ optimizedData }) {
 
                         </div>
                     }
-                    <div className="stat stats-vertical lg:stats-horizontal rounded-xl bg-white shadow-xl w-[50%]">
-                        <div className="stat-title">Sharpe ratio</div>
-                        <div className="stat-value">{optimizedData.data.optimized_results.performance.sharpe_ratio.toFixed(2)}</div>
-                    </div>
 
                 </div>
             </div>
