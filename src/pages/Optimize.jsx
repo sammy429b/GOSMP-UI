@@ -293,9 +293,9 @@ export default function Optimize() {
                             <div className="mx-auto w-[40%]">
                                 <p className="text-xl font-semibold mb-4">Choose your portfolio type please!!! - </p>
                                 <div className=" flex flex-row justify-between items-center bg-gray-100 rounded-3xl">
-                                    <button className={clsx("w-32 rounded-3xl h-12 font-bold text-black hover:bg-blue-600", (optimizedData.type === 1 && "bg-blue-500"))} onClick={() => { setOptimizedData({ loading: false, data: portfolio_variation_data.data["monte"], type: 1 }) }}>Monte</button>
-                                    <button className={clsx("w-32 rounded-3xl h-12 font-bold text-black hover:bg-blue-600", (optimizedData.type === 2 && "bg-blue-500"))} onClick={() => { setOptimizedData({ loading: false, data: portfolio_variation_data.data["efficient"], type: 2 }) }}>Efficient</button>
-                                    <button className={clsx("w-32 rounded-3xl h-12 font-bold text-black hover:bg-blue-600", (optimizedData.type === 3 && "bg-blue-500"))} onClick={() => { setOptimizedData({ loading: false, data: portfolio_variation_data.data["backlitter"], type: 3 }) }}>Backlitter</button>
+                                    <button className={clsx("w-32 rounded-3xl h-12 font-bold text-black hover:bg-blue-600 hover:text-white", (optimizedData.type === 1 && "bg-blue-500 text-white"))} onClick={() => { setOptimizedData({ loading: false, data: portfolio_variation_data.data["monte"], type: 1 }) }}>Monte</button>
+                                    <button className={clsx("w-32 rounded-3xl h-12 font-bold text-black hover:bg-blue-600 hover:text-white", (optimizedData.type === 2 && "bg-blue-500 text-white"))} onClick={() => { setOptimizedData({ loading: false, data: portfolio_variation_data.data["efficient"], type: 2 }) }}>Efficient</button>
+                                    <button className={clsx("w-32 rounded-3xl h-12 font-bold text-black hover:bg-blue-600 hover:text-white", (optimizedData.type === 3 && "bg-blue-500 text-white"))} onClick={() => { setOptimizedData({ loading: false, data: portfolio_variation_data.data["backlitter"], type: 3 }) }}>Backlitter</button>
 
                                 </div>
                             </div>
