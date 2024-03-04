@@ -5,8 +5,6 @@ import Card from './Card';
 
 export default function PortfolioTable({ optimizedData }) {
 
-
-
     return (
         <>
             {/* Fill optimizedData.data */}
@@ -20,11 +18,6 @@ export default function PortfolioTable({ optimizedData }) {
                     {
 
                         <div className="stats stats-vertical lg:stats-horizontal shadow-xl">
-
-                            <div className="stat">
-                                <div className="stat-title"> Portfolio variance</div>
-                                <div className="stat-value">{(optimizedData.data.equal_weights_results.portfolio_variance * 100).toFixed(2)}%</div>
-                            </div>
 
                             <div className="stat">
                                 <div className="stat-title">Volatility</div>
@@ -49,11 +42,6 @@ export default function PortfolioTable({ optimizedData }) {
                         <div className="stats stats-vertical lg:stats-horizontal shadow-xl">
 
                             <div className="stat">
-                                <div className="stat-title">Expected returns</div>
-                                <div className="stat-value">{(optimizedData.data.optimized_results.performance.expected_returns * 100).toFixed(2)}%</div>
-                            </div>
-
-                            <div className="stat">
                                 <div className="stat-title">Volatility</div>
                                 <div className="stat-value">{(optimizedData.data.optimized_results.performance.volatility * 100).toFixed(2)}%</div>
                             </div>
@@ -61,6 +49,11 @@ export default function PortfolioTable({ optimizedData }) {
                             <div className="stat">
                                 <div className="stat-title">Sharpe ratio</div>
                                 <div className="stat-value">{optimizedData.data.optimized_results.performance.sharpe_ratio.toFixed(2)}</div>
+                            </div>
+
+                            <div className="stat">
+                                <div className="stat-title">Annual returns</div>
+                                <div className="stat-value">{(optimizedData.data.optimized_results.performance.expected_returns * 100).toFixed(2)}%</div>
                             </div>
 
                         </div>
