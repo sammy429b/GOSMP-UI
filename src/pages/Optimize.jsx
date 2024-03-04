@@ -13,7 +13,7 @@ export default function Optimize() {
 
     const [diversifyPortfolio, setDiversifyPortfolio] = useState(false)
 
-    const [sectors, setSectors] = useState({})
+    const [sectors, setSectors] = useState([])
 
     const [selectedSectors, setSelectedSectors] = useState({})
 
@@ -21,6 +21,8 @@ export default function Optimize() {
         loading: false,
         data: null
     })
+
+    const [optimizer, setOptimizer] = useState("efficient_frontier")
 
     const [riskCategory, setRiskCategory] = useState("Low risk")
 
@@ -64,7 +66,9 @@ export default function Optimize() {
                 risk_category: riskCategory,
                 invest_amount: investmentAmount,
                 duration: duration * 30,
-                sectors: sectorValues
+                sector_weights: sectorValues,
+                optimizer: optimizer,
+                index: "nifty500"
             })
         }).then(response => response.json())
             .then(data => {
@@ -220,6 +224,20 @@ export default function Optimize() {
                                 <option value="High risk">High risk</option>
                                 <option value="Very high risk">Very high risk</option>
 
+                            </select>
+                        </label>
+
+                    </div>
+
+                    <div className="my-1 w-1/2 self-center flex flex-col items-center">
+                        <label className="form-control w-full max-w-lg">
+                            <div className="label">
+                                <span className="label-text text-base">Select Optimizer</span>
+                            </div>
+                            <select className="select select-bordered w-full max-w-lg" value={optimizer} onChange={(e) => setOptimizer(e.target.value)}>
+                                <option value="efficient_frontier">Efficient Frontier</option>
+                                <option value="black_litterman">Black Litterman</option>
+                                <option value="monte_carlo">Monte Carlo</option>
                             </select>
                         </label>
 
