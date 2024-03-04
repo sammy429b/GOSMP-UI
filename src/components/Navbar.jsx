@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 function Navbar() {
   const [theme, setTheme] = useState("light");
@@ -58,18 +58,18 @@ function Navbar() {
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
-           
-          <li>
-                <NavLink to="/"> Home</NavLink>
-              </li>
 
-              <li>
-                <NavLink to="/riskform">Portfolio</NavLink>
-              </li>
+            <li>
+              <Link to="/"> Home</Link>
+            </li>
 
-              <li>
-                <NavLink to="/about">About</NavLink>
-              </li>
+            <li>
+              <Link to="/riskform">Portfolio</Link>
+            </li>
+
+            <li>
+              <Link to="/about">About</Link>
+            </li>
           </ul>
         </div>
         <div className="navbar-end">
