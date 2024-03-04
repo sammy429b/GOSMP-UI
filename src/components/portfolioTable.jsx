@@ -4,7 +4,6 @@ import Card from './Card';
 
 
 export default function PortfolioTable({ optimizedData }) {
-    console.log(optimizedData)
     return (
         <>
             {/* Fill optimizedData.data */}
@@ -26,7 +25,7 @@ export default function PortfolioTable({ optimizedData }) {
 
                             <div className="stat">
                                 <div className="stat-title">Sharpe ratio</div>
-                                <div className="stat-value">{optimizedData.data.equal_weights_results.sharpe_ratio}%</div>
+                                <div className="stat-value">{optimizedData.data.equal_weights_results.sharpe_ratio}</div>
                             </div>
 
 
