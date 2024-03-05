@@ -1,9 +1,36 @@
 import Chart from 'chart.js/auto';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Pie } from 'react-chartjs-2';
 import Card from './Card';
+import { useEffect, useState } from 'react';
+
 
 
 export default function PortfolioTable({ optimizedData }) {
+
+    const getSectorPercentages = (weights, sector_allocation) => {
+        let sectorPercentages = {}
+        for (let stock in weights) {
+            let sector = sector_allocation[stock]
+            if (sector in sectorPercentages) {
+                sectorPercentages[sector] += weights[stock]
+            } else {
+                sectorPercentages[sector] = weights[stock]
+            }
+        }
+        return sectorPercentages
+
+    }
+
+    const [sectorPercentages, setSectorPercentages] = useState({})
+
+    
+
+    useEffect(() => { 
+        setSectorPercentages(getSectorPercentages(optimizedData.data.optimized_results.weights, optimizedData.data.optimized_results.sector_allocation))   
+    },[])
+
+
+
     return (
         <>
             {/* Fill optimizedData.data */}
@@ -67,10 +94,10 @@ export default function PortfolioTable({ optimizedData }) {
                 </div>
             </div>
 
-            <div className="my-2 w-2/3">
-                <div className="divider"></div>
+            <div className="my-2 w-full flex flex-col justify-center items-center">
+                <div className="divider self-center w-2/3"></div>
                 <h2 className="text-xl font-semibold">Invested</h2>
-                <table className="table w-full">
+                <table className="table w-2/3">
                     <thead>
                         <tr>
                             <th>Stock</th>
@@ -98,8 +125,8 @@ export default function PortfolioTable({ optimizedData }) {
                         }
                     </tbody>
                 </table>
-                <div className="divider"></div>
-                <Bar className="w-full"
+                <div className="divider self-center w-2/3"></div>
+                {/* <Bar className="w-full"
                     data={{
                         labels: Object.keys(optimizedData.data.optimized_results.invested),
                         datasets: [
@@ -131,7 +158,27 @@ export default function PortfolioTable({ optimizedData }) {
 
                         },
                     }}
-                />
+                /> */}
+                <div className='flex w-1/2 mx-auto justify-center items-center'>
+                <Pie className=""
+                width="600px"
+                height="600px"
+                    data={
+                        {
+                            labels: Object.keys(sectorPercentages),
+                            datasets: [
+                                {
+                                    data: Object.values(sectorPercentages),
+                                    backgroundColor: ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink', 'brown', 'grey', 'lightblue'],
+                                    borderColor: 'black',
+                                    borderWidth: 1,
+                                },
+                            ],
+                        }
+                    }
+                    />
+                </div>
+
             </div>
         </>
 

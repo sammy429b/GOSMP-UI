@@ -67,9 +67,9 @@ function Navbar() {
               <Link to="/riskform">Portfolio</Link>
             </li>
 
-            <li>
+            {/* <li>
               <Link to="/about">About</Link>
-            </li>
+            </li> */}
           </ul>
         </div>
         <div className="navbar-end">
