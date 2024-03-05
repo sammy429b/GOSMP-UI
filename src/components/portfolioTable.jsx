@@ -46,8 +46,8 @@ export default function PortfolioTable({ optimizedData }) {
                         <div className="stats stats-vertical lg:stats-horizontal shadow-xl">
 
                             <div className="stat">
-                                <div className="stat-title">Volatility</div>
-                                <div className="stat-value">{(optimizedData.data.equal_weights_results.portfolio_volatility * 100).toFixed(2)}%</div>
+                                <div className="stat-title">Annual return</div>
+                                <div className="stat-value">{(optimizedData.data.equal_weights_results.portfolio_annual_return * 100).toFixed(2)}%</div>
                             </div>
 
                             <div className="stat">
@@ -55,11 +55,11 @@ export default function PortfolioTable({ optimizedData }) {
                                 <div className="stat-value">{optimizedData.data.equal_weights_results.sharpe_ratio}</div>
                             </div>
 
-
                             <div className="stat">
-                                <div className="stat-title">Annual return</div>
-                                <div className="stat-value">{(optimizedData.data.equal_weights_results.portfolio_annual_return * 100).toFixed(2)}%</div>
+                                <div className="stat-title">Volatility</div>
+                                <div className="stat-value">{(optimizedData.data.equal_weights_results.portfolio_volatility * 100).toFixed(2)}%</div>
                             </div>
+
 
                         </div>
 
@@ -74,8 +74,8 @@ export default function PortfolioTable({ optimizedData }) {
                         <div className="stats stats-vertical lg:stats-horizontal shadow-xl ">
 
                             <div className="stat">
-                                <div className="stat-title">Volatility</div>
-                                <div className="stat-value">{(optimizedData.data.optimized_results.performance.volatility * 100).toFixed(2)}%</div>
+                                <div className="stat-title">Annual returns</div>
+                                <div className="stat-value">{(optimizedData.data.optimized_results.performance.expected_returns * 100).toFixed(2)}%</div>
                             </div>
 
                             <div className="stat">
@@ -84,8 +84,8 @@ export default function PortfolioTable({ optimizedData }) {
                             </div>
 
                             <div className="stat">
-                                <div className="stat-title">Annual returns</div>
-                                <div className="stat-value">{(optimizedData.data.optimized_results.performance.expected_returns * 100).toFixed(2)}%</div>
+                                <div className="stat-title">Volatility</div>
+                                <div className="stat-value">{(optimizedData.data.optimized_results.performance.volatility * 100).toFixed(2)}%</div>
                             </div>
 
                         </div>

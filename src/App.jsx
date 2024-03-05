@@ -4,6 +4,8 @@ import { BrowserRouter, RouterProvider, createBrowserRouter } from 'react-router
 import Optimize from './pages/Optimize'
 import App_Layout from './layout/layout'
 import Index from './pages/Index'
+import Login from './pages/Login'
+import Register from './pages/Register'
 
   
 const router = createBrowserRouter([
@@ -13,6 +15,14 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Index/>
+  },
+  {
+    path: '/login',
+    element: <Login/>
+  },
+  {
+    path: '/register',
+    element: <Register/>
   },
   {
     path: '/riskform',
