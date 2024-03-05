@@ -12,7 +12,7 @@ const Index = () => {
               Get More From Your Finance
             </h2>
             <button className="btn btn-primary text-lg my-3">
-              <Link to="/riskForm">
+              <Link to="/riskform">
               Get Started
               </Link>
               </button>

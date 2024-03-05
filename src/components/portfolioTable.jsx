@@ -23,6 +23,7 @@ export default function PortfolioTable({ optimizedData }) {
 
     const [sectorPercentages, setSectorPercentages] = useState({})
 
+    
 
     useEffect(() => { 
         setSectorPercentages(getSectorPercentages(optimizedData.data.optimized_results.weights, optimizedData.data.optimized_results.sector_allocation))   
@@ -158,8 +159,10 @@ export default function PortfolioTable({ optimizedData }) {
                         },
                     }}
                 /> */}
-                <div className='flex w-full justify-center'>
-                <Pie className="w-full"
+                <div className='flex w-1/2 mx-auto justify-center items-center'>
+                <Pie className=""
+                width="600px"
+                height="600px"
                     data={
                         {
                             labels: Object.keys(sectorPercentages),
